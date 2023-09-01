@@ -2,9 +2,12 @@ import { BsFacebook, BsTwitter, BsGoogle, BsCamera } from "react-icons/bs";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../Api/AuthApi";
+import Swal from "sweetalert2";
 
 const Register = () => {
+  const navigate =useNavigate()
   const model = yup.object({
     name: yup.string().required(),
     email: yup.string().required(),
@@ -19,6 +22,23 @@ const Register = () => {
   } = useForm({
     resolver: yupResolver(model),
   });
+
+  const onSubmit =handleSubmit (async(res)=>{
+    registerUser({
+      userName :res.name, 
+      email:res.email, 
+      password:res.password, 
+    }).then(()=>{
+      Swal.fire({
+        icon:"success",
+        title:"Created Successfully",
+        text:"Re-directing to dashboard",
+        timerProgressBar:true,
+        timer:3000,
+      })
+    navigate("/dashboard")
+    })
+  })
 
   return (
     <div className="w-full h-[100vh] flex justify-center items-center">
@@ -52,7 +72,8 @@ const Register = () => {
             Signin with google
           </div>
         </div>
-        <form className="w-[60%] h-full flex flex-col bg-white justify-center p-7">
+        <form className="w-[60%] h-full flex flex-col bg-white justify-center p-7 "
+        onSubmit={onSubmit}>
           {/* title */}
           <div className="font-bold text-[25px] text-rose-600 mb-5">
             Sign Up for Free!
