@@ -42,11 +42,6 @@ export const mainRouter = createBrowserRouter([
         element: <CheckOut />,
       },
       {
-        path: "detailed",
-        index: true,
-        element: <Detailed />,
-      },
-      {
         path: "payment",
         index: true,
         element: <Payment />,
